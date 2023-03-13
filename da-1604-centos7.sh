@@ -95,47 +95,6 @@ ETH_DEV=eth0
 IP=0
 OS_OVERRIDE_FILE=/root/.os_override
 GET_LICENSE=1
-
-if [ $# -gt 0 ]; then
-case "$1" in
-	--help|help|\?|-\?|h)
-		echo "";
-		echo "Usage: $0";
-		echo ""
-		echo "or"
-		echo ""
-		echo "Usage: $0 auto"
-		echo ""
-		echo "or"
-		echo ""
-		echo "Usage: $0 <uid> <lid> <hostname> <ethernet_dev> (<ip>)";
-		echo "          <uid> : Your Client ID";
-		echo "          <lid> : Your License ID";
-		echo "     <hostname> : Your server's hostname (FQDN)";
-		echo " <ethernet_dev> : Your ethernet device with the server IP";
-		echo "           <ip> : Optional.  Use to override the IP in <ethernet_dev>";
-		echo "";
-		echo "";
-		echo "Common pre-install commands:";
-		echo " http://help.directadmin.com/item.php?id=354";
-		exit 0;
-		;;
-esac
-	CID=$1;
-	LID=$2;
-	HOST=$3;
-	if [ $# -lt 4 ]; then
-		$0 --help
-		exit 56;
-	fi
-	ETH_DEV=$4;
-	CMD_LINE=1;
-	if [ $# -gt 4 ]; then
-		IP=$5;
-	fi
-fi
-
-B64=0
 B64=`uname -m | grep -c 64`
 if [ "$B64" -gt 0 ]; then
 	echo "*** 64-bit OS ***";
@@ -416,7 +375,8 @@ if [ $CMD_LINE -eq 0 ]; then
 	echo -n "Would you like to search for the fastest download mirror? (y/n): ";
 	read yesno;
 	if [ "$yesno" = "y" ]; then
-		${BUILD} set_fastest;
+		# ${BUILD} set_fastest;
+		echo "No fastest download!"
 	fi
 	if [ -s "${CB_OPTIONS}" ]; then
 		DL=`grep -m1 ^downloadserver= ${CB_OPTIONS} | cut -d= -f2`
@@ -426,38 +386,6 @@ if [ $CMD_LINE -eq 0 ]; then
 		fi
 	fi
 	sleep 2
-fi
-
-if [ "${AUTO}" = "1" ]; then
-	chmod 755 $BUILD
-
-	if [ -e /root/.using_fastest ]; then
-		echo "/root/.using_fastest is present. Not calling './build set_fastest'"
-	else
-		${BUILD} set_fastest
-	fi
-
-	if [ -s "${CB_OPTIONS}" ]; then
-		DL=`grep -m1 ^downloadserver= ${CB_OPTIONS} | cut -d= -f2`
-		if [ "${DL}" != "" ]; then
-			SERVER=http://${DL}/services
-			FTP_HOST=${DL}
-		fi
-
-		${BUILD} set userdir_access no
-	fi
-
-	if [ "${OS_NAME}" != "" ]; then
-		if [ -s ${OS_OVERRIDE_FILE} ]; then
-			
-			echo "The ${OS_OVERRIDE_FILE} already exists. Downlaoded binary OS will be:"
-			cat ${OS_OVERRIDE_FILE}
-		else
-			echo "Setting OS override to '${OS_NAME}' in ${OS_OVERRIDE_FILE}"
-			echo -n "${OS_NAME}" > ${OS_OVERRIDE_FILE}
-		fi
-	fi
-
 fi
 
 ##########
