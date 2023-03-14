@@ -17,7 +17,7 @@ crontabs file kernel-headers ipset
 # INSTALL DIRECTADMIN ONLY CENTOS7 64BIT
 ```
 # Directadmin 1.604 For Centos7
-wget -O setup.sh https://raw.githubusercontent.com/irf1404/Directadmin/master/da-1604-centos7.sh && chmod +x setup.sh && ./setup.sh
+wget -O setup.sh https://raw.githubusercontent.com/puarudz/DirectAdmin-1.60.2-Null/master/da-1604-centos7.sh && chmod +x setup.sh && ./setup.sh
 
 ```
 
